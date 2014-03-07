@@ -1,5 +1,5 @@
 #
-# Created by makemake (Sparc Sep  4 2012) on Thu Mar  6 23:11:10 2014
+# Created by makemake (Sparc Sep  4 2012) on Fri Mar  7 01:18:47 2014
 #
 
 #
@@ -50,32 +50,29 @@ CCLIBFLAGS =
 
 
 CPP_FILES =	
-C_FILES =	Emulator.c test.c
+C_FILES =	Emulator.c shared.c
 PS_FILES =	
 S_FILES =	
-H_FILES =	
+H_FILES =	shared.h
 SOURCEFILES =	$(H_FILES) $(CPP_FILES) $(C_FILES) $(S_FILES)
 .PRECIOUS:	$(SOURCEFILES)
-OBJFILES =	
+OBJFILES =	shared.o 
 
 #
 # Main targets
 #
 
-all:	Emulator test 
+all:	Emulator 
 
 Emulator:	Emulator.o $(OBJFILES)
 	$(CC) $(CFLAGS) -o Emulator Emulator.o $(OBJFILES) $(CLIBFLAGS)
-
-test:	test.o $(OBJFILES)
-	$(CC) $(CFLAGS) -o test test.o $(OBJFILES) $(CLIBFLAGS)
 
 #
 # Dependencies
 #
 
-Emulator.o:	
-test.o:	
+Emulator.o:	shared.h
+shared.o:	shared.h
 
 #
 # Housekeeping
@@ -87,7 +84,7 @@ archive.tgz:	$(SOURCEFILES) Makefile
 	tar cf - $(SOURCEFILES) Makefile | gzip > archive.tgz
 
 clean:
-	-/bin/rm $(OBJFILES) Emulator.o test.o ptrepository SunWS_cache .sb ii_files core 2> /dev/null
+	-/bin/rm $(OBJFILES) Emulator.o ptrepository SunWS_cache .sb ii_files core 2> /dev/null
 
 realclean:        clean
-	-/bin/rm -rf Emulator test 
+	-/bin/rm -rf Emulator 

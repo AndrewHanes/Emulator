@@ -1,26 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define MEMSIZE 65000
-
-#define MSK_OPCODE 0xff00
-#define MSK_OPERAND1 0xf0
-#define MSK_OPERAND2 0xf
-#define true 1
-#define false 0
-#define DUMP 10
-
-#define lookup(reg, mem) (mem[(unsigned short) reg])
-
-typedef short size_a;
-typedef char bool;
-
+#include "shared.h"
 size_a* mem;
 size_a ac, pc, sp, bc, dc, cc, ec, fc;
 size_a z = 0;
 
-bool done = false;
 /**
  * Populate text section of memory
  * @return MEMSIZE on overflow, or number of bytes read in
@@ -163,23 +145,15 @@ bool execute() {
 	return true;
 }
 
-size_a genop(short code, short op1, short op2) {
-	code <<= 8;
-	op1 <<= 4;
-	code = code & MSK_OPCODE;
-	op1 = op1 & MSK_OPERAND1;
-	op2 = op2 & MSK_OPERAND2;
-	return code | op1 | op2;
-}
 int main(int argc, char** argv) {
 	mem = (size_a*) malloc(MEMSIZE);
 	pc = 0;
 	sp = MEMSIZE - 1;
-	mem[0] = genop(9, 3, 2);
-	mem[1] = genop(9, 1, 15);
-	mem[2] = genop(5, 1, 1);
-	mem[4] = genop(3, 3, 0);
-	mem[5] = genop(4, 0, 0);
+	mem[0] = geninstr(9, 3, 2);
+	mem[1] = geninstr(9, 1, 15);
+	mem[2] = geninstr(5, 1, 1);
+	mem[4] = geninstr(3, 3, 0);
+	mem[5] = geninstr(4, 0, 0);
 	while(execute()) {
 		++pc;
 	}
