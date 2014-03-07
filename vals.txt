@@ -1,0 +1,22 @@
+ac = 1
+sp = 2
+bc = 3
+pc 4
+dc 5
+cc 5
+ec 7
+fc 8
+
+0 load
+1 store
+2 skip
+3 jmp
+4 halt
+5 add
+6 push
+7 pop
+8 mul
+9 li
+10 sub
+11 negate
+
