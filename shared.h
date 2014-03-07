@@ -28,5 +28,11 @@ short lookupOpcode(char* operand);
 
 short lookupOperand(char* operand);
 
+typedef struct instr {
+	unsigned short instr : 8;
+	unsigned short op1: 4;
+	unsigned short op2: 4;
+} instr_t;
+
 
 #endif

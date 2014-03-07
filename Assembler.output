@@ -1,0 +1,124 @@
+Terminals which are not used
+
+   ERROR
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program statement
+    2        | /* empty */
+
+    3 statement: OPERATION REGISTER REGISTER
+    4          | OPERATION REGISTER IMMEDIATE
+    5          | OPERATION REGISTER
+    6          | LABEL
+    7          | IGNORE
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+IGNORE (258) 7
+LABEL (259) 6
+OPERATION (260) 3 4 5
+REGISTER (261) 3 4 5
+IMMEDIATE (262) 4
+ERROR (263)
+
+
+Nonterminals, with rules where they appear
+
+$accept (9)
+    on left: 0
+program (10)
+    on left: 1 2, on right: 0 1
+statement (11)
+    on left: 3 4 5 6 7, on right: 1
+
+
+state 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 2 (program)
+
+    program  go to state 1
+
+
+state 1
+
+    0 $accept: program . $end
+    1 program: program . statement
+
+    $end       shift, and go to state 2
+    IGNORE     shift, and go to state 3
+    LABEL      shift, and go to state 4
+    OPERATION  shift, and go to state 5
+
+    statement  go to state 6
+
+
+state 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 3
+
+    7 statement: IGNORE .
+
+    $default  reduce using rule 7 (statement)
+
+
+state 4
+
+    6 statement: LABEL .
+
+    $default  reduce using rule 6 (statement)
+
+
+state 5
+
+    3 statement: OPERATION . REGISTER REGISTER
+    4          | OPERATION . REGISTER IMMEDIATE
+    5          | OPERATION . REGISTER
+
+    REGISTER  shift, and go to state 7
+
+
+state 6
+
+    1 program: program statement .
+
+    $default  reduce using rule 1 (program)
+
+
+state 7
+
+    3 statement: OPERATION REGISTER . REGISTER
+    4          | OPERATION REGISTER . IMMEDIATE
+    5          | OPERATION REGISTER .
+
+    REGISTER   shift, and go to state 8
+    IMMEDIATE  shift, and go to state 9
+
+    $default  reduce using rule 5 (statement)
+
+
+state 8
+
+    3 statement: OPERATION REGISTER REGISTER .
+
+    $default  reduce using rule 3 (statement)
+
+
+state 9
+
+    4 statement: OPERATION REGISTER IMMEDIATE .
+
+    $default  reduce using rule 4 (statement)

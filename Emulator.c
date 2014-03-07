@@ -1,4 +1,5 @@
 #include "shared.h"
+#include <glib.h>
 size_a* mem;
 size_a ac, pc, sp, bc, dc, cc, ec, fc;
 size_a z = 0;
@@ -92,6 +93,7 @@ bool execute() {
 					(*r1 > 0) ? ++pc: pc;
 				default:
 					//TODO ERROR
+					fprintf(stderr, "Invalid comparison operator\n");
 					return false;
 			}
 			break;
@@ -152,7 +154,8 @@ int main(int argc, char** argv) {
 	mem[0] = geninstr(9, 3, 2);
 	mem[1] = geninstr(9, 1, 15);
 	mem[2] = geninstr(5, 1, 1);
-	mem[4] = geninstr(3, 3, 0);
+	mem[3] = geninstr(5, 1, 1);
+	mem[4] = geninstr(5, 1, 1);
 	mem[5] = geninstr(4, 0, 0);
 	while(execute()) {
 		++pc;
