@@ -1,5 +1,5 @@
 #ifndef __SHARED_H__
-#define __SHARED_H_
+#define __SHARED_H__
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,5 +20,13 @@ typedef short size_a;
 typedef char bool;
 
 size_a geninstr(short code, short op1, short op2);
+
+#define ARRAY_SIZE(foo) (sizeof(foo)/sizeof(foo[0]))
+#define LOOKUP_ERR -1
+
+short lookupOpcode(char* operand);
+
+short lookupOperand(char* operand);
+
 
 #endif
