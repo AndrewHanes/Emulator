@@ -72,6 +72,7 @@
 #include <inttypes.h>
 #include "../hardware/shared.h"
 #include "Assembler.yy.c"
+#include <glib.h>
 
 instr_t* instr;
 int yyerror(char* s);
@@ -81,7 +82,7 @@ int addr = 0;
 
 
 /* Line 268 of yacc.c  */
-#line 85 "Assembler.tab.c"
+#line 86 "Assembler.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -124,7 +125,7 @@ typedef union YYSTYPE
 {
 
 /* Line 293 of yacc.c  */
-#line 14 "Assembler.y"
+#line 15 "Assembler.y"
 
 	instr_t i;
 	short lbl;
@@ -132,7 +133,7 @@ typedef union YYSTYPE
 
 
 /* Line 293 of yacc.c  */
-#line 136 "Assembler.tab.c"
+#line 137 "Assembler.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -144,7 +145,7 @@ typedef union YYSTYPE
 
 
 /* Line 343 of yacc.c  */
-#line 148 "Assembler.tab.c"
+#line 149 "Assembler.tab.c"
 
 #ifdef short
 # undef short
@@ -432,7 +433,7 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    24,    24,    25,    28,    34,    41,    47,    50
+       0,    25,    25,    26,    29,    36,    43,    49,    52
 };
 #endif
 
@@ -1356,30 +1357,31 @@ yyreduce:
         case 2:
 
 /* Line 1806 of yacc.c  */
-#line 24 "Assembler.y"
+#line 25 "Assembler.y"
     { ++addr; }
     break;
 
   case 4:
 
 /* Line 1806 of yacc.c  */
-#line 28 "Assembler.y"
+#line 29 "Assembler.y"
     {
 	 	//TODO
 		(yyval.i).instr = (yyvsp[(1) - (3)].i).instr;
 		(yyval.i).op1 = (yyvsp[(2) - (3)].i).op1;
-		(yyval.i).op2 = (yyvsp[(3) - (3)].i).op2;
+		(yyval.i).op2 = (yyvsp[(3) - (3)].i).op1;
+		printf("%d\t%d\t%d\t\n", (yyval.i).instr, (yyval.i).op1, (yyval.i).op2);
 	 }
     break;
 
   case 5:
 
 /* Line 1806 of yacc.c  */
-#line 34 "Assembler.y"
+#line 36 "Assembler.y"
     {
 	 	(yyval.i).instr = (yyvsp[(1) - (3)].i).instr;
-		(yyval.i).op1 = (yyvsp[(1) - (3)].i).op1;
-		(yyval.i).op2 = (yyvsp[(2) - (3)].i).op2;
+		(yyval.i).op1 = (yyvsp[(2) - (3)].i).op1;
+		(yyval.i).op2 = (yyvsp[(3) - (3)].i).op1;
 	 	//TODO
 	 
 	 }
@@ -1388,7 +1390,7 @@ yyreduce:
   case 6:
 
 /* Line 1806 of yacc.c  */
-#line 41 "Assembler.y"
+#line 43 "Assembler.y"
     {
 	 	//TODO
 	 	(yyval.i).instr = (yyvsp[(1) - (2)].i).instr;
@@ -1400,7 +1402,7 @@ yyreduce:
   case 7:
 
 /* Line 1806 of yacc.c  */
-#line 47 "Assembler.y"
+#line 49 "Assembler.y"
     {
 		//TODO add label
 	 }
@@ -1409,14 +1411,14 @@ yyreduce:
   case 8:
 
 /* Line 1806 of yacc.c  */
-#line 50 "Assembler.y"
+#line 52 "Assembler.y"
     {}
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 1420 "Assembler.tab.c"
+#line 1422 "Assembler.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1647,7 +1649,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 52 "Assembler.y"
+#line 54 "Assembler.y"
 
 
 int yyerror(char* s) {
@@ -1656,6 +1658,24 @@ int yyerror(char* s) {
 }
 
 int main(int argc, char** argv) {
-	return yyparse();
+	if(argc == 0) {
+		yyin = stdin;
+		yyout = stdout;
+	}
+	else if (argc == 1) {
+		yyin = fopen(argv[1], "r");
+		yyout = stdout;
+	}
+	else {
+		yyin = fopen(argv[1], "r");
+		yyout = fopen(argv[2], "r");
+	}
+	int n = yyparse();
+	if(yyin != stdin) {
+		fclose(yyin);
+	}
+	if(yyout != stdout) {
+		fclose(yyout);
+	}
 }
 

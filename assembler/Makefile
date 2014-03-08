@@ -1,6 +1,6 @@
 CC = c99
 
-CCFLAGS = -ggdb
+CCFLAGS = -ggdb -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
 
 C_FILES = shared.c
 H_FILES = shared.h
@@ -8,7 +8,7 @@ LEX_FILES = Assembler.lex Assembler.y
 
 SOURCE = $(C_FILES) $(H_FILES) $(LEX_FILES)
 
-INTERMEDIATE = Assembler.yy.c shared.o Assembler.tab.c Assembler.output Assembler.dSYM Assembler-lex.dSYM shared.h.gch shared.* $(EXECS)
+INTERMEDIATE = Assembler.yy.c shared.o Assembler.tab.* Assembler.output Assembler.dSYM Assembler-lex.dSYM shared.h.gch shared.* $(EXECS)
 
 EXECS = Assembler 
 

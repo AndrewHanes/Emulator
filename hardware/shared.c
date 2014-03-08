@@ -4,8 +4,8 @@ char* opcodes[]= {"load", "store", "skip", "jmp", "halt",
 	"add", "push", "pop" "mul", "li",
 	"sub", "negate"};
 
-char* operandcode[] = {"ac", "sp", "bc" "pc", "dc", 
-	"cc", "ec", "fc"};
+char* operandcode[] = {"%zo", "%ac", "%sp", "%bc" "%pc", "%dc", 
+	"%cc", "%ec", "%fc"};
 
 size_a geninstr(short code, short op1, short op2) {
 	code <<= 8;
@@ -18,7 +18,7 @@ size_a geninstr(short code, short op1, short op2) {
 
 short lookupOpcode(char* operand) {
 	for(int i = 0; i < ARRAY_SIZE(opcodes); ++i) {
-		if(!strcmp(opcodes[i], operand)) {
+		if(strcmp(opcodes[i], operand) == 0) {
 			return i;
 		}
 	}
@@ -27,7 +27,7 @@ short lookupOpcode(char* operand) {
 
 short lookupOperand(char* operand) {
 	for(int i = 0; i < ARRAY_SIZE(operandcode); ++i) {
-		if(!strcmp(operandcode[i], operand)) {
+		if(strncmp(operandcode[i], operand, 3) == 0) {
 			return i;
 		}
 	}

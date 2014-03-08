@@ -3,6 +3,7 @@
 #include <inttypes.h>
 #include "../hardware/shared.h"
 #include "Assembler.yy.c"
+#include <glib.h>
 
 instr_t* instr;
 int yyerror(char* s);
@@ -29,12 +30,13 @@ statement: OPERATION REGISTER REGISTER {
 	 	//TODO
 		$$.instr = $1.instr;
 		$$.op1 = $2.op1;
-		$$.op2 = $3.op2;
+		$$.op2 = $3.op1;
+		printf("%d\t%d\t%d\t\n", $$.instr, $$.op1, $$.op2);
 	 }
 	 | OPERATION REGISTER IMMEDIATE {
 	 	$$.instr = $1.instr;
-		$$.op1 = $1.op1;
-		$$.op2 = $2.op2;
+		$$.op1 = $2.op1;
+		$$.op2 = $3.op1;
 	 	//TODO
 	 
 	 }
@@ -57,5 +59,23 @@ int yyerror(char* s) {
 }
 
 int main(int argc, char** argv) {
-	return yyparse();
+	if(argc == 0) {
+		yyin = stdin;
+		yyout = stdout;
+	}
+	else if (argc == 1) {
+		yyin = fopen(argv[1], "r");
+		yyout = stdout;
+	}
+	else {
+		yyin = fopen(argv[1], "r");
+		yyout = fopen(argv[2], "r");
+	}
+	int n = yyparse();
+	if(yyin != stdin) {
+		fclose(yyin);
+	}
+	if(yyout != stdout) {
+		fclose(yyout);
+	}
 }
