@@ -69,6 +69,7 @@
 #line 1 "Assembler.y"
 
 #define YYDEBUG 1
+#include <stdlib.h>
 #include <inttypes.h>
 #include "../hardware/shared.h"
 #include "Assembler.yy.c"
@@ -78,11 +79,13 @@ instr_t* instr;
 int yyerror(char* s);
 int yylex();
 int addr = 0;
+size_a* mem;
+size_a* ptr;
 
 
 
 /* Line 268 of yacc.c  */
-#line 86 "Assembler.tab.c"
+#line 89 "Assembler.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -125,7 +128,7 @@ typedef union YYSTYPE
 {
 
 /* Line 293 of yacc.c  */
-#line 15 "Assembler.y"
+#line 18 "Assembler.y"
 
 	instr_t i;
 	short lbl;
@@ -133,7 +136,7 @@ typedef union YYSTYPE
 
 
 /* Line 293 of yacc.c  */
-#line 137 "Assembler.tab.c"
+#line 140 "Assembler.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -145,7 +148,7 @@ typedef union YYSTYPE
 
 
 /* Line 343 of yacc.c  */
-#line 149 "Assembler.tab.c"
+#line 152 "Assembler.tab.c"
 
 #ifdef short
 # undef short
@@ -371,7 +374,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  3
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  8
+#define YYNRULES  9
 /* YYNRULES -- Number of states.  */
 #define YYNSTATES  10
 
@@ -419,21 +422,21 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     6,     7,    11,    15,    18,    20
+       0,     0,     3,     6,     7,    11,    15,    18,    20,    22
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
       10,     0,    -1,    10,    11,    -1,    -1,     5,     6,     6,
-      -1,     5,     6,     7,    -1,     5,     6,    -1,     4,    -1,
-       3,    -1
+      -1,     5,     6,     7,    -1,     5,     6,    -1,     5,    -1,
+       4,    -1,     3,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    25,    25,    26,    29,    36,    43,    49,    52
+       0,    28,    28,    32,    35,    41,    48,    54,    59,    62
 };
 #endif
 
@@ -459,13 +462,13 @@ static const yytype_uint16 yytoknum[] =
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,     9,    10,    10,    11,    11,    11,    11,    11
+       0,     9,    10,    10,    11,    11,    11,    11,    11,    11
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     2,     0,     3,     3,     2,     1,     1
+       0,     2,     2,     0,     3,     3,     2,     1,     1,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default reduction number in state STATE-NUM.
@@ -473,7 +476,7 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       3,     0,     1,     8,     7,     0,     2,     6,     4,     5
+       3,     0,     1,     9,     8,     7,     2,     6,     4,     5
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -1357,32 +1360,34 @@ yyreduce:
         case 2:
 
 /* Line 1806 of yacc.c  */
-#line 25 "Assembler.y"
-    { ++addr; }
+#line 28 "Assembler.y"
+    { 
+		*(ptr++) = geninstr((yyvsp[(2) - (2)].i).instr, (yyvsp[(2) - (2)].i).op1, (yyvsp[(2) - (2)].i).op2);
+		printf("%d\t%d\t%d\t\n", (yyvsp[(2) - (2)].i).instr, (yyvsp[(2) - (2)].i).op1, (yyvsp[(2) - (2)].i).op2);
+	}
     break;
 
   case 4:
 
 /* Line 1806 of yacc.c  */
-#line 29 "Assembler.y"
+#line 35 "Assembler.y"
     {
 	 	//TODO
 		(yyval.i).instr = (yyvsp[(1) - (3)].i).instr;
 		(yyval.i).op1 = (yyvsp[(2) - (3)].i).op1;
 		(yyval.i).op2 = (yyvsp[(3) - (3)].i).op1;
-		printf("%d\t%d\t%d\t\n", (yyval.i).instr, (yyval.i).op1, (yyval.i).op2);
 	 }
     break;
 
   case 5:
 
 /* Line 1806 of yacc.c  */
-#line 36 "Assembler.y"
+#line 41 "Assembler.y"
     {
-	 	(yyval.i).instr = (yyvsp[(1) - (3)].i).instr;
+		(yyval.i).instr = (yyvsp[(1) - (3)].i).instr;
 		(yyval.i).op1 = (yyvsp[(2) - (3)].i).op1;
 		(yyval.i).op2 = (yyvsp[(3) - (3)].i).op1;
-	 	//TODO
+		//TODO
 	 
 	 }
     break;
@@ -1390,7 +1395,7 @@ yyreduce:
   case 6:
 
 /* Line 1806 of yacc.c  */
-#line 43 "Assembler.y"
+#line 48 "Assembler.y"
     {
 	 	//TODO
 	 	(yyval.i).instr = (yyvsp[(1) - (2)].i).instr;
@@ -1402,23 +1407,34 @@ yyreduce:
   case 7:
 
 /* Line 1806 of yacc.c  */
-#line 49 "Assembler.y"
+#line 54 "Assembler.y"
     {
-		//TODO add label
+		(yyval.i).instr = (yyvsp[(1) - (1)].i).instr;
+		(yyval.i).op1 = 0;
+		(yyval.i).op2 = 0;
 	 }
     break;
 
   case 8:
 
 /* Line 1806 of yacc.c  */
-#line 52 "Assembler.y"
+#line 59 "Assembler.y"
+    {
+		//TODO add label
+	 }
+    break;
+
+  case 9:
+
+/* Line 1806 of yacc.c  */
+#line 62 "Assembler.y"
     {}
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 1422 "Assembler.tab.c"
+#line 1438 "Assembler.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1649,7 +1665,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 54 "Assembler.y"
+#line 64 "Assembler.y"
 
 
 int yyerror(char* s) {
@@ -1658,24 +1674,22 @@ int yyerror(char* s) {
 }
 
 int main(int argc, char** argv) {
-	if(argc == 0) {
-		yyin = stdin;
-		yyout = stdout;
+	mem = (size_a*) calloc(1, MEMSIZE);
+	ptr = mem;
+	if(argc != 3) {
+		fprintf(stderr, "Usage: %s in out\n", argv[0]);
 	}
-	else if (argc == 1) {
-		yyin = fopen(argv[1], "r");
-		yyout = stdout;
-	}
-	else {
-		yyin = fopen(argv[1], "r");
-		yyout = fopen(argv[2], "r");
-	}
+	yyin = fopen(argv[1], "r");
+	yyout = fopen(argv[2], "w+");
 	int n = yyparse();
+	*ptr = geninstr(4, 0, 0);
+	fwrite(mem,MEMSIZE, 1, yyout);
 	if(yyin != stdin) {
 		fclose(yyin);
 	}
 	if(yyout != stdout) {
 		fclose(yyout);
 	}
+	free(mem);
 }
 

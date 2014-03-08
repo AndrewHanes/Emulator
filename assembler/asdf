@@ -1,3 +1,12 @@
 main:
 
+li %ac 50
+li %bc 20
 add %ac %bc
+halt
+halt
+halt
+halt
+halt
+halt
+halt

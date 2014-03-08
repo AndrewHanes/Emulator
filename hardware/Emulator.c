@@ -150,12 +150,9 @@ int main(int argc, char** argv) {
 	mem = (size_a*) malloc(MEMSIZE);
 	pc = 0;
 	sp = MEMSIZE - 1;
-	mem[0] = geninstr(9, 3, 2);
-	mem[1] = geninstr(9, 1, 15);
-	mem[2] = geninstr(5, 1, 1);
-	mem[3] = geninstr(5, 1, 1);
-	mem[4] = geninstr(5, 1, 1);
-	mem[5] = geninstr(4, 0, 0);
+	FILE* in = fopen(argv[1], "r");
+	fread(mem, MEMSIZE, 1, in);
+	fclose(in);
 	while(execute()) {
 		++pc;
 	}

@@ -16,18 +16,15 @@
 \%[A-z][A-z] {
 	short reg = lookupOperand(yytext);
 	yylval.i.op1 = reg;
-	printf("register: %s\n", yytext);
 	return REGISTER;
 }
 
 [0-9]+ {
 	yylval.i.op1 = (short) (atoi(yytext));
-	printf("immediate: %s\n", yytext);
 	return IMMEDIATE;
 }
 
 [A-z]+: {
-	printf("label: %s\n");
 	return LABEL;
 }
 

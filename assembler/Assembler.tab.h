@@ -53,7 +53,7 @@ typedef union YYSTYPE
 {
 
 /* Line 2068 of yacc.c  */
-#line 15 "Assembler.y"
+#line 18 "Assembler.y"
 
 	instr_t i;
 	short lbl;
