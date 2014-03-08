@@ -1,5 +1,4 @@
 #include "shared.h"
-#include <glib.h>
 size_a* mem;
 size_a ac, pc, sp, bc, dc, cc, ec, fc;
 size_a z = 0;

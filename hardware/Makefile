@@ -1,5 +1,5 @@
 #
-# Created by makemake (Sparc Sep  4 2012) on Fri Mar  7 01:40:04 2014
+# Created by makemake (Sparc Sep  4 2012) on Sat Mar  8 15:11:37 2014
 #
 
 #
@@ -31,7 +31,7 @@
 		$(AR) $(ARFLAGS) $@ $%
 		$(RM) $%
 
-CC =		cc
+CC =		c99
 CXX =		CC
 
 RM = rm -f
@@ -43,7 +43,7 @@ COMPILE.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c
 CPP = $(CPP) $(CPPFLAGS)
 ########## Default flags (redefine these with a header.mak file if desired)
 CXXFLAGS =	-g -xildoff -xsb
-CFLAGS =	-g -I/usr/local/Cellar/glib/2.38.2/include/glib-2.0 -I/usr/local/Cellar/glib/2.38.2/lib/glib-2.0/include -I/usr/local/opt/gettext/include
+CFLAGS =	-g
 CLIBFLAGS =	-lm
 CCLIBFLAGS =	
 ########## End of default flags
@@ -56,14 +56,14 @@ S_FILES =
 H_FILES =	shared.h
 SOURCEFILES =	$(H_FILES) $(CPP_FILES) $(C_FILES) $(S_FILES)
 .PRECIOUS:	$(SOURCEFILES)
-OBJFILES =	shared.o
-ASFILES = 	Assembler.tab.c Assembler.yy.c Assembler.tab.h
+OBJFILES =	shared.o 
 
 #
 # Main targets
 #
 
 all:	Emulator
+
 
 Emulator:	Emulator.o $(OBJFILES)
 	$(CC) $(CFLAGS) -o Emulator Emulator.o $(OBJFILES) $(CLIBFLAGS)
@@ -85,25 +85,7 @@ archive.tgz:	$(SOURCEFILES) Makefile
 	tar cf - $(SOURCEFILES) Makefile | gzip > archive.tgz
 
 clean:
-	-/bin/rm $(OBJFILES) $(ASFILES) Emulator.o ptrepository SunWS_cache .sb ii_files core 2> /dev/null
+	-/bin/rm $(OBJFILES) Emulator.o ptrepository SunWS_cache .sb ii_files core 2> /dev/null
 
 realclean:        clean
 	-/bin/rm -rf Emulator 
-
-Assembler: Assembler.tab.c Assembler.yy.c Shared.o
-	$(CC) $(CFLAGS) -o Assembler Assembler.tab.c Shared.o $(OBJFILES) $(CLIBFLAGS)
-
-Assembler.tab.c: Assembler.y Shared.o
-	bison -v Assembler.y
-
-Assembler.tab.h: Assembler.y Shared.o
-	bison -d Assembler.y
-
-Assembler.yy.c: Assembler.tab.c
-	flex -oAssembler.yy.c Assembler.lex
-
-
-
-
-
-

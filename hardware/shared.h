@@ -34,5 +34,4 @@ typedef struct instr {
 	unsigned short op2: 4;
 } instr_t;
 
-
 #endif

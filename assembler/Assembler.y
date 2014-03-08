@@ -1,8 +1,8 @@
 %{
 #define YYDEBUG 1
 #include <inttypes.h>
-#include "shared.h"
-#include <glib.h>
+#include "../hardware/shared.h"
+#include "Assembler.yy.c"
 
 instr_t* instr;
 int yyerror(char* s);

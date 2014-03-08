@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "shared.h"
+#include "../hardware/shared.h"
 
 #include "Assembler.tab.h"
 %}
@@ -33,7 +33,7 @@
 }
 
 [A-z]+\: {
-	yylval.lbl = addr;
+	yylval.lbl = (char*) strdup(yytext);
 	return LABEL;
 }
 

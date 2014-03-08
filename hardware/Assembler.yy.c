@@ -772,7 +772,7 @@ case 6:
 YY_RULE_SETUP
 #line 35 "Assembler.lex"
 {
-	yylval.lbl = addr;
+	yylval.lbl = (char*) strdup(yytext);
 	return LABEL;
 }
 	YY_BREAK
