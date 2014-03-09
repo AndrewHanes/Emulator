@@ -5,11 +5,13 @@
 #include "../hardware/shared.h"
 #include "Assembler.yy.c"
 #include <glib.h>
+#define PARSE_ERROR 0xabcd
 
 instr_t* instr;
 int yyerror(char* s);
 int yylex();
 int addr = 0;
+int line = 0;
 size_a* mem;
 size_a* ptr;
 
@@ -26,32 +28,37 @@ size_a* ptr;
 %%
 
 program: program statement { 
+		++line;
 		*(ptr++) = geninstr($2.instr, $2.op1, $2.op2);
-		printf("%d\t%d\t%d\t\n", $2.instr, $2.op1, $2.op2);
+		if($2.instr == LOOKUP_ERR) {
+			yyerror("Invalid instruction\n");
+			return PARSE_ERROR;
+		}
+
 	}
 	| /* e */
    ;
 
 statement: OPERATION REGISTER REGISTER {
-	 	//TODO
+		printf("2 args\n");
 		$$.instr = $1.instr;
 		$$.op1 = $2.op1;
 		$$.op2 = $3.op1;
 	 }
 	 | OPERATION REGISTER IMMEDIATE {
+		printf("1+i args\n");
 		$$.instr = $1.instr;
 		$$.op1 = $2.op1;
 		$$.op2 = $3.op1;
-		//TODO
 	 
 	 }
 	 | OPERATION REGISTER {
-	 	//TODO
 	 	$$.instr = $1.instr;
-		$$.op1 = $1.op1;
+		$$.op1 = $2.op1;
 		$$.op2 = 0;
 	 }
 	 | OPERATION {
+		printf("No args\n");
 		$$.instr = $1.instr;
 		$$.op1 = 0;
 		$$.op2 = 0;
@@ -59,12 +66,16 @@ statement: OPERATION REGISTER REGISTER {
 	 | LABEL {
 		//TODO add label
 	 }
-	 | IGNORE {} ;
+	 | IGNORE {} 
+	 | ERROR {
+		yyerror("Error");
+	}
+	;
 
 %%
 
 int yyerror(char* s) {
-	fprintf(stderr, "Error: %s\n", s);
+	fprintf(stderr, "Error: %s\n on line %d", s, line);
 	return 1;
 }
 
@@ -77,7 +88,8 @@ int main(int argc, char** argv) {
 	yyin = fopen(argv[1], "r");
 	yyout = fopen(argv[2], "w+");
 	int n = yyparse();
-	fwrite(mem,MEMSIZE, 1, yyout);
+	if(n != PARSE_ERROR)
+		fwrite(mem,MEMSIZE, 1, yyout);
 	if(yyin != stdin) {
 		fclose(yyin);
 	}
@@ -85,4 +97,5 @@ int main(int argc, char** argv) {
 		fclose(yyout);
 	}
 	free(mem);
+	return n;
 }

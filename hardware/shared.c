@@ -2,7 +2,7 @@
 
 char* opcodes[]= {"load", "store", "skip", "jmp", "halt", 
 	"add", "push", "pop", "mul", "li",
-	"sub", "negate"};
+	"sub", "negate", "mov", "dump"};
 
 char* operandcode[] = {"%zo", "%ac", "%sp", "%bc" "%pc", "%dc", 
 	"%cc", "%ec", "%fc"};

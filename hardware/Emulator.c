@@ -63,8 +63,8 @@ bool execute() {
 	size_a* r1 = lkOp(op1);
 	size_a* r2 = lkOp(op2);
 
-	printf("opcode: %d\top1:%d\top2:%d\n", opcode, op1, op2);
-	debug();
+	//printf("opcode: %d\top1:%d\top2:%d\n", opcode, op1, op2);
+	//debug();
 	switch(opcode) {
 		case 0:
 			//load from mem @ op1 into op2
@@ -113,14 +113,14 @@ bool execute() {
 		case 6:
 			//push
 			//incr sp, put op1 onto stack
-			sp++;
+			sp--;
 			mem[(unsigned short) sp] = *r1;
 			break;
 		case 7:
 			//pop
 			// decr sp, put value into op1
 			*r1 = mem[(unsigned short) sp];
-			sp--;
+			sp++;
 			break;
 		case 8:
 			//mul
@@ -129,6 +129,7 @@ bool execute() {
 			break;
 		case 9:
 			//load immediate
+			//
 			*r1 = op2;
 			break;
 		case 10:
@@ -138,6 +139,16 @@ bool execute() {
 		case 11:
 			//negate op1
 			*r1 = -1**r1;
+			break;
+		case 12:
+			//copy
+			*r2 = *r1;
+			break;
+
+		//DEBUG INSTRUCTIONS//
+		case 13:
+			//dump register
+			printf("register: %d\tvalue: %d\n", op1, *r1);
 			break;
 		default:
 			fprintf(stderr, "Unknown opcode %d.  Terminating", opcode);
