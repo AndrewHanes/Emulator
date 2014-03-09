@@ -1,7 +1,7 @@
 #include "shared.h"
 
 char* opcodes[]= {"load", "store", "skip", "jmp", "halt", 
-	"add", "push", "pop" "mul", "li",
+	"add", "push", "pop", "mul", "li",
 	"sub", "negate"};
 
 char* operandcode[] = {"%zo", "%ac", "%sp", "%bc" "%pc", "%dc", 
@@ -18,7 +18,7 @@ size_a geninstr(short code, short op1, short op2) {
 
 short lookupOpcode(char* operand) {
 	for(int i = 0; i < ARRAY_SIZE(opcodes); ++i) {
-		if(strcmp(opcodes[i], operand) == 0) {
+		if(strncmp(opcodes[i], operand, 2) == 0) {
 			return i;
 		}
 	}

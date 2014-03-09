@@ -48,7 +48,7 @@ size_a* lkOp(unsigned char operand) {
 }
 
 void debug() {
-	printf("Registers\nAC: %d\tBC: %d\nPC: %d\tSP: %d\n", ac, bc, 
+	printf("Registers\nAC: %d\tBC: %d\nPC: %d\tSP: %d\n\n", ac, bc, 
 			(unsigned short) pc, (unsigned short) sp);
 }
 
@@ -63,7 +63,7 @@ bool execute() {
 	size_a* r1 = lkOp(op1);
 	size_a* r2 = lkOp(op2);
 
-	printf("opcode: %d\top1:%d\top2:%d\n\n\n", opcode, op1, op2);
+	printf("opcode: %d\top1:%d\top2:%d\n", opcode, op1, op2);
 	debug();
 	switch(opcode) {
 		case 0:

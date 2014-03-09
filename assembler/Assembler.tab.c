@@ -1682,7 +1682,6 @@ int main(int argc, char** argv) {
 	yyin = fopen(argv[1], "r");
 	yyout = fopen(argv[2], "w+");
 	int n = yyparse();
-	*ptr = geninstr(4, 0, 0);
 	fwrite(mem,MEMSIZE, 1, yyout);
 	if(yyin != stdin) {
 		fclose(yyin);

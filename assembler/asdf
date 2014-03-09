@@ -1,12 +1,4 @@
-main:
-
-li %ac 50
-li %bc 20
+li %ac 5
+li %bc 6
 add %ac %bc
-halt
-halt
-halt
-halt
-halt
-halt
 halt
