@@ -62,9 +62,10 @@ bool execute() {
 	unsigned char op2 = (instr & MSK_OPERAND2);
 	size_a* r1 = lkOp(op1);
 	size_a* r2 = lkOp(op2);
-
-	//printf("opcode: %d\top1:%d\top2:%d\n", opcode, op1, op2);
-	//debug();
+	#ifdef DEBUG
+	printf("opcode: %d\top1:%d\top2:%d\n", opcode, op1, op2);
+	debug();
+	#endif
 	switch(opcode) {
 		case 0:
 			//load from mem @ op1 into op2
@@ -99,6 +100,7 @@ bool execute() {
 		case 3:
 			//jmp
 			// op1 is offset
+			printf("jummping to %d\n", (unsigned short) *r1);
 			pc = *r1;
 			break;
 		case 4:

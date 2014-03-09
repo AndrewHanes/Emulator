@@ -1,4 +1,4 @@
-CC = c99
+CC = clang
 
 CCFLAGS = -ggdb -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
 
@@ -32,7 +32,7 @@ Assembler.tab.h:	Assembler.y shared.o
 	bison -d Assembler.y
 
 clean:
-	rm -r $(INTERMEDIATE) core 2> /dev/null
+	rm -rf $(INTERMEDIATE)
 
 realclean:	clean
-	rm -r $(EXECS) core 2> /dev/null
+	rm -rf $(EXECS)

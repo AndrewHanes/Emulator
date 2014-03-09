@@ -2,38 +2,41 @@ Grammar
 
     0 $accept: program $end
 
-    1 program: program statement
+    1 program: program statement NEWLINE
     2        | /* empty */
+    3        | program LABEL NEWLINE
+    4        | program IGNORE NEWLINE
 
-    3 statement: OPERATION REGISTER REGISTER
-    4          | OPERATION REGISTER IMMEDIATE
-    5          | OPERATION REGISTER
-    6          | OPERATION
-    7          | LABEL
-    8          | IGNORE
-    9          | ERROR
+    5 statement: OPERATION REGISTER REGISTER
+    6          | OPERATION REGISTER IMMEDIATE
+    7          | OPERATION REGISTER
+    8          | OPERATION LBLNAME
+    9          | OPERATION
+   10          | ERROR
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-IGNORE (258) 8
-LABEL (259) 7
-OPERATION (260) 3 4 5 6
-REGISTER (261) 3 4 5
-IMMEDIATE (262) 4
-ERROR (263) 9
+IGNORE (258) 4
+OPERATION (259) 5 6 7 8 9
+REGISTER (260) 5 6 7
+IMMEDIATE (261) 6
+ERROR (262) 10
+NEWLINE (263) 1 3 4
+LABEL (264) 3
+LBLNAME (265) 8
 
 
 Nonterminals, with rules where they appear
 
-$accept (9)
+$accept (11)
     on left: 0
-program (10)
-    on left: 1 2, on right: 0 1
-statement (11)
-    on left: 3 4 5 6 7 8 9, on right: 1
+program (12)
+    on left: 1 2 3 4, on right: 0 1 3 4
+statement (13)
+    on left: 5 6 7 8 9 10, on right: 1
 
 
 state 0
@@ -48,13 +51,15 @@ state 0
 state 1
 
     0 $accept: program . $end
-    1 program: program . statement
+    1 program: program . statement NEWLINE
+    3        | program . LABEL NEWLINE
+    4        | program . IGNORE NEWLINE
 
     $end       shift, and go to state 2
     IGNORE     shift, and go to state 3
-    LABEL      shift, and go to state 4
-    OPERATION  shift, and go to state 5
-    ERROR      shift, and go to state 6
+    OPERATION  shift, and go to state 4
+    ERROR      shift, and go to state 5
+    LABEL      shift, and go to state 6
 
     statement  go to state 7
 
@@ -68,65 +73,95 @@ state 2
 
 state 3
 
-    8 statement: IGNORE .
+    4 program: program IGNORE . NEWLINE
 
-    $default  reduce using rule 8 (statement)
+    NEWLINE  shift, and go to state 8
 
 
 state 4
 
-    7 statement: LABEL .
+    5 statement: OPERATION . REGISTER REGISTER
+    6          | OPERATION . REGISTER IMMEDIATE
+    7          | OPERATION . REGISTER
+    8          | OPERATION . LBLNAME
+    9          | OPERATION .
 
-    $default  reduce using rule 7 (statement)
-
-
-state 5
-
-    3 statement: OPERATION . REGISTER REGISTER
-    4          | OPERATION . REGISTER IMMEDIATE
-    5          | OPERATION . REGISTER
-    6          | OPERATION .
-
-    REGISTER  shift, and go to state 8
-
-    $default  reduce using rule 6 (statement)
-
-
-state 6
-
-    9 statement: ERROR .
+    REGISTER  shift, and go to state 9
+    LBLNAME   shift, and go to state 10
 
     $default  reduce using rule 9 (statement)
 
 
+state 5
+
+   10 statement: ERROR .
+
+    $default  reduce using rule 10 (statement)
+
+
+state 6
+
+    3 program: program LABEL . NEWLINE
+
+    NEWLINE  shift, and go to state 11
+
+
 state 7
 
-    1 program: program statement .
+    1 program: program statement . NEWLINE
 
-    $default  reduce using rule 1 (program)
+    NEWLINE  shift, and go to state 12
 
 
 state 8
 
-    3 statement: OPERATION REGISTER . REGISTER
-    4          | OPERATION REGISTER . IMMEDIATE
-    5          | OPERATION REGISTER .
+    4 program: program IGNORE NEWLINE .
 
-    REGISTER   shift, and go to state 9
-    IMMEDIATE  shift, and go to state 10
-
-    $default  reduce using rule 5 (statement)
+    $default  reduce using rule 4 (program)
 
 
 state 9
 
-    3 statement: OPERATION REGISTER REGISTER .
+    5 statement: OPERATION REGISTER . REGISTER
+    6          | OPERATION REGISTER . IMMEDIATE
+    7          | OPERATION REGISTER .
 
-    $default  reduce using rule 3 (statement)
+    REGISTER   shift, and go to state 13
+    IMMEDIATE  shift, and go to state 14
+
+    $default  reduce using rule 7 (statement)
 
 
 state 10
 
-    4 statement: OPERATION REGISTER IMMEDIATE .
+    8 statement: OPERATION LBLNAME .
 
-    $default  reduce using rule 4 (statement)
+    $default  reduce using rule 8 (statement)
+
+
+state 11
+
+    3 program: program LABEL NEWLINE .
+
+    $default  reduce using rule 3 (program)
+
+
+state 12
+
+    1 program: program statement NEWLINE .
+
+    $default  reduce using rule 1 (program)
+
+
+state 13
+
+    5 statement: OPERATION REGISTER REGISTER .
+
+    $default  reduce using rule 5 (statement)
+
+
+state 14
+
+    6 statement: OPERATION REGISTER IMMEDIATE .
+
+    $default  reduce using rule 6 (statement)

@@ -34,4 +34,12 @@ typedef struct instr {
 	unsigned short op2: 4;
 } instr_t;
 
+typedef struct node {
+	struct node* next;
+	unsigned short address;
+	char* label;
+	char; //padding
+} lbl_t;
+
+
 #endif
