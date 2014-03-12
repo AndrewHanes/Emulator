@@ -1,5 +1,12 @@
-jmp $done
 li %ac 5
+li %cc 1
 dump %ac
+top:
+li %bc 1
+sub %ac %bc
+mov %bc %ac
+dump %ac
+skip %ac %cc
+jmp $top
 done:
 halt
