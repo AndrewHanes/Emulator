@@ -1,3 +1,7 @@
+/*
+* Lexical Analyzer for Assembler
+* @author: Andrew Hanes <ahanes@csh.rit.edu
+*/
 %{
 #include <stdlib.h>
 #include <stdio.h>

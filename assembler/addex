@@ -1,0 +1,6 @@
+li %ac 10
+li %bc 3
+add %bc %ac
+dump %ac
+dump %bc
+halt

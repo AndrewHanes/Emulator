@@ -1,3 +1,8 @@
+/*
+* Assembler.y
+* Andrew Hanes <ahanes@csh.rit.edu>
+*/
+
 %{
 #define YYDEBUG 1
 #include <stdlib.h>
@@ -6,15 +11,18 @@
 #include "Assembler.yy.c"
 #define PARSE_ERROR 0xabcd
 
+/*
+* Globals
+*/
 instr_t* instr;
-int yyerror(char* s);
+int yyerror(char* s); // func prototype
 int yylex();
-int addr = 0;
-int line = 0;
-size_a* mem;
-size_a* ptr;
-int runNum = 1;
-lbl_t* labels;
+int addr = 0; //current addr (for labels)
+int line = 0; //current line (for error handler)
+size_a* mem; //mem ptr
+size_a* ptr; //ptr to next free loc in mem
+int runNum = 1; //which pass?
+lbl_t* labels; //head of the label linked list
 
 %}
 
@@ -110,6 +118,9 @@ int yyerror(char* s) {
 	return 1;
 }
 
+/*
+* allocate mem for instr buffer, handles file IO
+*/
 int main(int argc, char** argv) {
 	mem = (size_a*) calloc(1, MEMSIZE);
 	ptr = mem;

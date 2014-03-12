@@ -2,7 +2,6 @@ jmp $bottom
 middle:
 li %ac 3
 dump %ac
-jmp $middle
 halt
 bottom:
 jmp $middle

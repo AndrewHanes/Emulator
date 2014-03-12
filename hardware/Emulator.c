@@ -20,7 +20,10 @@ int populateText(size_a* mem, char* fname) {
 	}
 	return size;
 }
-
+/*
+ * Looks up operand
+ * @return pointer to register
+ */
 size_a* lkOp(unsigned char operand) {
 	switch(operand) {
 		case 0:
@@ -47,8 +50,11 @@ size_a* lkOp(unsigned char operand) {
 	return NULL;
 }
 
+/*
+ * Debug
+ */
 void debug() {
-	printf("Registers\nAC: %d\tBC: %d\nPC: %d\tSP: %d\n\n", ac, bc, 
+	printf("Registers\nAC: %d\tBC: %d\nPC: %d\tSP: %d\n\n", ac, bc,
 			(unsigned short) pc, (unsigned short) sp);
 }
 
@@ -72,7 +78,7 @@ bool execute() {
 			*r2 = mem[(unsigned short) *r1];
 			break;
 		case 1:
-			//store op1  to mem @ op2 
+			//store op1  to mem @ op2
 			mem[(unsigned short) *r2] = *r1;
 			break;
 		case 2:
@@ -159,6 +165,9 @@ bool execute() {
 	return true;
 }
 
+/**
+ * main
+ */
 int main(int argc, char** argv) {
 	mem = (size_a*) malloc(MEMSIZE);
 	pc = 0;

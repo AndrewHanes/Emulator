@@ -1100,7 +1100,7 @@ yyparse ()
 #endif
 #endif
 {
-  
+
   int yystate;
   int yyn;
   int yyresult;
@@ -1396,7 +1396,7 @@ yyreduce:
 		(yyval.i).instr = (yyvsp[(1) - (3)].i).instr;
 		(yyval.i).op1 = (yyvsp[(2) - (3)].i).op1;
 		(yyval.i).op2 = (yyvsp[(3) - (3)].i).op1;
-	 
+
 	 ;}
     break;
 
@@ -1671,7 +1671,11 @@ int yyerror(char* s) {
 	return 1;
 }
 
+/*
+ * init mem, do first pass, clear mem, second pass
+ */
 int main(int argc, char** argv) {
+    //first pass
 	mem = (size_a*) calloc(1, MEMSIZE);
 	ptr = mem;
 	labels = (lbl_t*) calloc(1, sizeof(lbl_t));
@@ -1682,9 +1686,11 @@ int main(int argc, char** argv) {
 	}
 	yyin = fopen(argv[1], "r");
 	yyout = fopen(argv[2], "w+");
+    //open files forIO
 	int n = yyparse();
 	fclose(yyin);
 	yyin = fopen(argv[1], "r");
+    //reset yyin file
 	free(mem);
 	line = 0;
 	addr = 0;

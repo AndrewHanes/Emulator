@@ -1,12 +1,15 @@
 #include "shared.h"
 
-char* opcodes[]= {"load", "store", "skip", "jmp", "halt", 
+char* opcodes[]= {"load", "store", "skip", "jmp", "halt",
 	"add", "push", "pop", "mul", "li",
 	"sub", "negate", "mov", "dump"};
 
-char* operandcode[] = {"%zo", "%ac", "%sp", "%bc" "%pc", "%dc", 
+char* operandcode[] = {"%zo", "%ac", "%sp", "%bc" "%pc", "%dc",
 	"%cc", "%ec", "%fc"};
 
+/*
+ * generates an instruction, returns it
+ */
 size_a geninstr(short code, short op1, short op2) {
 	code <<= 8;
 	op1 <<= 4;
@@ -16,6 +19,9 @@ size_a geninstr(short code, short op1, short op2) {
 	return code | op1 | op2;
 }
 
+/*
+ * Looks up an opcode
+ */
 short lookupOpcode(char* operand) {
 	for(int i = 0; i < ARRAY_SIZE(opcodes); ++i) {
 		if(strncmp(opcodes[i], operand, 2) == 0) {
@@ -25,6 +31,9 @@ short lookupOpcode(char* operand) {
 	return LOOKUP_ERR;
 }
 
+/*
+ * look up operand (register)
+ */
 short lookupOperand(char* operand) {
 	for(int i = 0; i < ARRAY_SIZE(operandcode); ++i) {
 		if(strncmp(operandcode[i], operand, 3) == 0) {
