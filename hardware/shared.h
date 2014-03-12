@@ -20,7 +20,7 @@
 #define false 0
 #define DUMP 10
 
-/looks up a mem location
+//looks up a mem location
 #define lookup(reg, mem) (mem[(unsigned short) reg])
 
 //size of arch

@@ -64,7 +64,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 21 "Assembler.y"
+#line 29 "Assembler.y"
 {
 	instr_t i;
 	lbl_t label;

@@ -1,9 +1,0 @@
-li %ac 1
-li %bc 1
-add %bc %ac
-li %cc 10
-mov %cc %ac
-push %ac
-dump %ac
-pop %bc
-halt

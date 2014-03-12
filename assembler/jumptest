@@ -1,7 +1,5 @@
-jmp $bottom
-middle:
-li %ac 3
+jmp $done
+li %ac 5
 dump %ac
+done:
 halt
-bottom:
-jmp $middle

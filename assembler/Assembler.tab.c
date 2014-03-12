@@ -90,7 +90,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "Assembler.y"
+#line 6 "Assembler.y"
 
 #define YYDEBUG 1
 #include <stdlib.h>
@@ -99,15 +99,18 @@
 #include "Assembler.yy.c"
 #define PARSE_ERROR 0xabcd
 
+/*
+* Globals
+*/
 instr_t* instr;
-int yyerror(char* s);
+int yyerror(char* s); // func prototype
 int yylex();
-int addr = 0;
-int line = 0;
-size_a* mem;
-size_a* ptr;
-int runNum = 1;
-lbl_t* labels;
+int addr = 0; //current addr (for labels)
+int line = 0; //current line (for error handler)
+size_a* mem; //mem ptr
+size_a* ptr; //ptr to next free loc in mem
+int runNum = 1; //which pass?
+lbl_t* labels; //head of the label linked list
 
 
 
@@ -131,7 +134,7 @@ lbl_t* labels;
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 21 "Assembler.y"
+#line 29 "Assembler.y"
 {
 	instr_t i;
 	lbl_t label;
@@ -139,7 +142,7 @@ typedef union YYSTYPE
 	char* lbl_goto;
 }
 /* Line 193 of yacc.c.  */
-#line 143 "Assembler.tab.c"
+#line 146 "Assembler.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -152,7 +155,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 156 "Assembler.tab.c"
+#line 159 "Assembler.tab.c"
 
 #ifdef short
 # undef short
@@ -438,8 +441,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    34,    34,    43,    44,    57,    62,    67,    73,    78,
-      96,   101
+       0,    42,    42,    54,    55,    68,    73,    78,    84,    89,
+     108,   113
 };
 #endif
 
@@ -1100,7 +1103,7 @@ yyparse ()
 #endif
 #endif
 {
-
+  
   int yystate;
   int yyn;
   int yyresult;
@@ -1345,20 +1348,23 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 34 "Assembler.y"
+#line 42 "Assembler.y"
     {
-       		++addr;
+       	++addr;
 		++line;
-		*(ptr++) = geninstr((yyvsp[(2) - (3)].i).instr, (yyvsp[(2) - (3)].i).op1, (yyvsp[(2) - (3)].i).op2);
-		if((yyvsp[(2) - (3)].i).instr == LOOKUP_ERR) {
-			yyerror("Invalid instruction\n");
-			return PARSE_ERROR;
+        if(runNum == 2) {
+            *(ptr++) = geninstr((yyvsp[(2) - (3)].i).instr, (yyvsp[(2) - (3)].i).op1, (yyvsp[(2) - (3)].i).op2);
+            printf("instr: %d\top1: %d\top2: %d\n", (yyvsp[(2) - (3)].i).instr, (yyvsp[(2) - (3)].i).op1, (yyvsp[(2) - (3)].i).op2);
+            if((yyvsp[(2) - (3)].i).instr == LOOKUP_ERR) {
+                yyerror("Invalid instruction\n");
+                return PARSE_ERROR;
+            }
 		}
 	;}
     break;
 
   case 4:
-#line 44 "Assembler.y"
+#line 55 "Assembler.y"
     {
 		++line;
 		if(runNum == 1) {
@@ -1375,14 +1381,14 @@ yyreduce:
     break;
 
   case 5:
-#line 57 "Assembler.y"
+#line 68 "Assembler.y"
     {
 		++line;
 	;}
     break;
 
   case 6:
-#line 62 "Assembler.y"
+#line 73 "Assembler.y"
     {
 		(yyval.i).instr = (yyvsp[(1) - (3)].i).instr;
 		(yyval.i).op1 = (yyvsp[(2) - (3)].i).op1;
@@ -1391,17 +1397,17 @@ yyreduce:
     break;
 
   case 7:
-#line 67 "Assembler.y"
+#line 78 "Assembler.y"
     {
 		(yyval.i).instr = (yyvsp[(1) - (3)].i).instr;
 		(yyval.i).op1 = (yyvsp[(2) - (3)].i).op1;
 		(yyval.i).op2 = (yyvsp[(3) - (3)].i).op1;
-
+	 
 	 ;}
     break;
 
   case 8:
-#line 73 "Assembler.y"
+#line 84 "Assembler.y"
     {
 	 	(yyval.i).instr = (yyvsp[(1) - (2)].i).instr;
 		(yyval.i).op1 = (yyvsp[(2) - (2)].i).op1;
@@ -1410,29 +1416,30 @@ yyreduce:
     break;
 
   case 9:
-#line 78 "Assembler.y"
+#line 89 "Assembler.y"
     {
-		(yyval.i).instr = (yyvsp[(1) - (2)].i).instr;
-		(yyval.i).op1 = 0;
-		(yyval.i).op2 = 0;
-		printf("%s\n", (yyvsp[(2) - (2)].lbl_goto));
-		lbl_t* ptr = labels;
-		while(ptr != 0) {
-			printf("%s =?= %s\n", ptr->label, (yyvsp[(2) - (2)].lbl_goto));
-			if(ptr->label != NULL && strcmp(ptr->label, (yyvsp[(2) - (2)].lbl_goto)) == 0) {
-				(yyval.i).op1 = ptr->address;
-				printf("jmp label %s to %d\n", ptr->label, (yyval.i).op1);
-				break;
-			} else {
-				printf("nope\n");
-			}
-			ptr = ptr->next;
+        if(runNum == 2) {
+            (yyval.i).instr = (yyvsp[(1) - (2)].i).instr;
+            (yyval.i).op1 = 0;
+            (yyval.i).op2 = 0;
+            lbl_t* ptr = labels;
+            while(ptr != 0) {
+                printf("%s =?= %s\n", ptr->label, (yyvsp[(2) - (2)].lbl_goto));
+                if(ptr->label != NULL && strcmp(ptr->label, (yyvsp[(2) - (2)].lbl_goto)) == 0) {
+                    (yyval.i).op1 = ptr->address;
+                    printf("YEP jmp label %s to %d\n", ptr->label, ptr->address);
+                    break;
+                } else {
+                    printf("nope\n");
+                }
+                ptr = ptr->next;
+            }
 		}
 	 ;}
     break;
 
   case 10:
-#line 96 "Assembler.y"
+#line 108 "Assembler.y"
     {
 		(yyval.i).instr = (yyvsp[(1) - (1)].i).instr;
 		(yyval.i).op1 = 0;
@@ -1441,7 +1448,7 @@ yyreduce:
     break;
 
   case 11:
-#line 101 "Assembler.y"
+#line 113 "Assembler.y"
     {
 		yyerror("Error");
 	;}
@@ -1449,7 +1456,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1453 "Assembler.tab.c"
+#line 1460 "Assembler.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1663,7 +1670,7 @@ yyreturn:
 }
 
 
-#line 106 "Assembler.y"
+#line 118 "Assembler.y"
 
 
 int yyerror(char* s) {
@@ -1672,10 +1679,10 @@ int yyerror(char* s) {
 }
 
 /*
- * init mem, do first pass, clear mem, second pass
- */
+* allocate mem for instr buffer, handles file IO
+*/
 int main(int argc, char** argv) {
-    //first pass
+    runNum = 1;
 	mem = (size_a*) calloc(1, MEMSIZE);
 	ptr = mem;
 	labels = (lbl_t*) calloc(1, sizeof(lbl_t));
@@ -1686,16 +1693,11 @@ int main(int argc, char** argv) {
 	}
 	yyin = fopen(argv[1], "r");
 	yyout = fopen(argv[2], "w+");
-    //open files forIO
 	int n = yyparse();
 	fclose(yyin);
 	yyin = fopen(argv[1], "r");
-    //reset yyin file
-	free(mem);
 	line = 0;
 	addr = 0;
-	mem = (size_a*) calloc(1, MEMSIZE);
-	ptr = mem;
 	runNum = 2;
 	n = yyparse();
 	if(n != PARSE_ERROR)

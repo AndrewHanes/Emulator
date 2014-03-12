@@ -454,14 +454,18 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "Assembler.lex"
-#line 2 "Assembler.lex"
+/*
+* Lexical Analyzer for Assembler
+* @author: Andrew Hanes <ahanes@csh.rit.edu
+*/
+#line 6 "Assembler.lex"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "../hardware/shared.h"
 #include "Assembler.tab.h"
 
-#line 465 "Assembler.yy.c"
+#line 469 "Assembler.yy.c"
 
 #define INITIAL 0
 
@@ -643,10 +647,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 10 "Assembler.lex"
+#line 14 "Assembler.lex"
 
 
-#line 650 "Assembler.yy.c"
+#line 654 "Assembler.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -731,23 +735,23 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 12 "Assembler.lex"
+#line 16 "Assembler.lex"
 ;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 14 "Assembler.lex"
+#line 18 "Assembler.lex"
 ;
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 16 "Assembler.lex"
+#line 20 "Assembler.lex"
 { return NEWLINE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 18 "Assembler.lex"
+#line 22 "Assembler.lex"
 {
 	short reg = lookupOperand(yytext);
 	yylval.i.op1 = reg;
@@ -756,7 +760,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 24 "Assembler.lex"
+#line 28 "Assembler.lex"
 {
 	yylval.i.op1 = (short) (atoi(yytext));
 	return IMMEDIATE;
@@ -764,7 +768,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 29 "Assembler.lex"
+#line 33 "Assembler.lex"
 {
 	yylval.label.label = (char*) strdup(yytext);
 	int len = strlen(yylval.label.label);
@@ -774,7 +778,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 36 "Assembler.lex"
+#line 40 "Assembler.lex"
 {
 	short opcode = lookupOpcode(yytext);
 	yylval.i.instr = opcode;
@@ -783,7 +787,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 42 "Assembler.lex"
+#line 46 "Assembler.lex"
 {
 	yylval.lbl_goto = (char*) strdup(yytext);
 	yylval.lbl_goto = yylval.lbl_goto+1; //get rid of the '$'
@@ -792,7 +796,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 48 "Assembler.lex"
+#line 52 "Assembler.lex"
 {
 	fprintf(stderr, "Error: Unknown token %s\n", yytext);
 	return ERROR;
@@ -800,10 +804,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 53 "Assembler.lex"
+#line 57 "Assembler.lex"
 ECHO;
 	YY_BREAK
-#line 807 "Assembler.yy.c"
+#line 811 "Assembler.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1800,7 +1804,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 53 "Assembler.lex"
+#line 57 "Assembler.lex"
 
 
 

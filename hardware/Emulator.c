@@ -106,8 +106,9 @@ bool execute() {
 		case 3:
 			//jmp
 			// op1 is offset
-			printf("jummping to %d\n", (unsigned short) *r1);
-			pc = *r1;
+			printf("jumping to %d\n", op1);
+			pc = op1;
+            pc--;
 			break;
 		case 4:
 			//Halt

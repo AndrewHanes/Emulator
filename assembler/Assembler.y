@@ -40,12 +40,15 @@ lbl_t* labels; //head of the label linked list
 %%
 
 program: program statement NEWLINE  {
-       		++addr;
+       	++addr;
 		++line;
-		*(ptr++) = geninstr($2.instr, $2.op1, $2.op2);
-		if($2.instr == LOOKUP_ERR) {
-			yyerror("Invalid instruction\n");
-			return PARSE_ERROR;
+        if(runNum == 2) {
+            *(ptr++) = geninstr($2.instr, $2.op1, $2.op2);
+            printf("instr: %d\top1: %d\top2: %d\n", $2.instr, $2.op1, $2.op2);
+            if($2.instr == LOOKUP_ERR) {
+                yyerror("Invalid instruction\n");
+                return PARSE_ERROR;
+            }
 		}
 	}
 	| /* e */
@@ -84,21 +87,22 @@ statement: OPERATION REGISTER REGISTER {
 		$$.op2 = 0;
 	 }
 	 | OPERATION LBLNAME {
-		$$.instr = $1.instr;
-		$$.op1 = 0;
-		$$.op2 = 0;
-		printf("%s\n", $2);
-		lbl_t* ptr = labels;
-		while(ptr != 0) {
-			printf("%s =?= %s\n", ptr->label, $2);
-			if(ptr->label != NULL && strcmp(ptr->label, $2) == 0) {
-				$$.op1 = ptr->address;
-				printf("jmp label %s to %d\n", ptr->label, $$.op1);
-				break;
-			} else {
-				printf("nope\n");
-			}
-			ptr = ptr->next;
+        if(runNum == 2) {
+            $$.instr = $1.instr;
+            $$.op1 = 0;
+            $$.op2 = 0;
+            lbl_t* ptr = labels;
+            while(ptr != 0) {
+                printf("%s =?= %s\n", ptr->label, $2);
+                if(ptr->label != NULL && strcmp(ptr->label, $2) == 0) {
+                    $$.op1 = ptr->address;
+                    printf("YEP jmp label %s to %d\n", ptr->label, ptr->address);
+                    break;
+                } else {
+                    printf("nope\n");
+                }
+                ptr = ptr->next;
+            }
 		}
 	 }
 	 | OPERATION {
@@ -122,6 +126,7 @@ int yyerror(char* s) {
 * allocate mem for instr buffer, handles file IO
 */
 int main(int argc, char** argv) {
+    runNum = 1;
 	mem = (size_a*) calloc(1, MEMSIZE);
 	ptr = mem;
 	labels = (lbl_t*) calloc(1, sizeof(lbl_t));
@@ -135,11 +140,8 @@ int main(int argc, char** argv) {
 	int n = yyparse();
 	fclose(yyin);
 	yyin = fopen(argv[1], "r");
-	free(mem);
 	line = 0;
 	addr = 0;
-	mem = (size_a*) calloc(1, MEMSIZE);
-	ptr = mem;
 	runNum = 2;
 	n = yyparse();
 	if(n != PARSE_ERROR)
